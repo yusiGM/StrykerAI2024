@@ -37,7 +37,7 @@ Venv setup on vscode:
 11) Code as normal! :)
 12) Deactive Venv using the command: deactivate, in the terminal
 
-#### **Option 2: Pip Install requirements individually **
+#### **Option 2: Pip Install requirements individually and use either Vscode/ Jupyter Notebook or Google Collab **
 This method is not recommended due to the inability to consistently control library versions across multiple instances of the code.  
 Copy each of the libraries from requirements.txt, setup a new cell on the notebook and pip install each library individually.
 
