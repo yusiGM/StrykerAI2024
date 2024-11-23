@@ -1,10 +1,25 @@
-# StrykerAI2024
-Repository for the 2024 Stryker AI in Orthopaedics hackathon.
-Team consists of Yusuf Salim, GuruVignesh Balji, Rohan Reddy and Mohamed Jama.
+ #StrykerAI2024
 
-Required libraries are in requirements.txt
-If on Jupyter notebook either pip install each of them individually or setup a Virtual Enviroment (Venv)(recommended). 
-The latter is recommended to better manage python dependencies, avoid conflicts and make the enviroment consistent across multiple systems.
+### Repository for the 2024 Stryker AI in Orthopaedics Hackathon
+
+This project aims to classify orthopedic patients into two classes (**normal** and **abnormal**) based on six biomechanical and image-derived predictors using a machine-learning algorithm. Additionally, the project involves describing the steps to successfully deploy this solution into an orthopaedic outpatient clinical setting. The bonus challenge extends upon this by catagorisng patients into three classes (**normal**, **herniated disc** and **spondylolisthesis**)
+
+---
+
+## Team Members
+- **Yusuf Salim**
+- **GuruVignesh Balaji**
+- **Rohan Reddy**
+- **Mohamed Jama**
+
+---
+
+## Instructions for Setup
+
+### Required Libraries
+All required libraries and dependencies are listed in the `requirements.txt` file.
+
+#### **Option 1: Using a Virtual Environment (Recommended)**
 
 Venv setup on vscode:
 1) Go to terminal
@@ -19,6 +34,11 @@ Venv setup on vscode:
 10) Once Venv is activated open notebook on vscode and select the Venv as your kernal
 11) Code as normal! :)
 12) Deactive Venv using the command deactivate in the terminal
+
+#### **Option 2: Pip Install requirements individually **
+This method is not recommended due to the inability to consistently control library versions across multiple instances of the code.
+Copy each of the libraries from requirements.txt, setup a new cell on the notebook and pip install each library individually.
+
 
     
 ## Dataset License
