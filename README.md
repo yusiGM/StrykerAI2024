@@ -36,7 +36,7 @@ Venv setup on vscode:
 12) Deactive Venv using the command deactivate in the terminal
 
 #### **Option 2: Pip Install requirements individually **
-This method is not recommended due to the inability to consistently control library versions across multiple instances of the code.
+This method is not recommended due to the inability to consistently control library versions across multiple instances of the code.  
 Copy each of the libraries from requirements.txt, setup a new cell on the notebook and pip install each library individually.
 
 
