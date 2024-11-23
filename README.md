@@ -13,11 +13,13 @@ This project aims to classify orthopedic patients into two classes (**normal** a
 - **Mohamed Jama**
 
 ---
+### Repository breakdown
+
+The repository consists of a `requirements.txt` text file and a 'Stryker_AI_Hackathon.ipynb' jupyter notebook file.  
+`requirements.txt` contains all the required libraries and dependencies for the project. 
+'Stryker_AI_Hackathon.ipynb' is the notebook containing our teams submission code.
 
 ## Instructions for Setup
-
-### Required Libraries
-All required libraries and dependencies are listed in the `requirements.txt` file.
 
 #### **Option 1: Using a Virtual Environment (Recommended)**
 
