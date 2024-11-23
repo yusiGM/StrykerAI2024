@@ -35,7 +35,7 @@ Venv setup on vscode:
 9) Step 8 will need to be done each time before activating Venv (some systems prevent script execution by default and Step 8 overrides this for a single session)
 10) Once Venv is activated open notebook on vscode and select the Venv as your kernal
 11) Code as normal! :)
-12) Deactive Venv using the command deactivate in the terminal
+12) Deactive Venv using the command: deactivate, in the terminal
 
 #### **Option 2: Pip Install requirements individually **
 This method is not recommended due to the inability to consistently control library versions across multiple instances of the code.  
