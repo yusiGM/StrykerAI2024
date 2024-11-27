@@ -8,7 +8,7 @@ This project aims to classify orthopedic patients into two classes (**normal** a
 
 ## Team Members
 - **Yusuf Salim**
-- **GuruVignesh Balaji**
+- **Guruvignesh Balaji**
 - **Rohan Reddy**
 - **Mohamed Jama**
 
