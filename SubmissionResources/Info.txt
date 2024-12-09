@@ -1,0 +1,1 @@
+This folder contains all the relevant powerpoints, pdf's and word documents for the Stryker 2024 AI Hackathon
