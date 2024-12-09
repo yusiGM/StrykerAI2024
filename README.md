@@ -14,11 +14,11 @@ This project aims to classify orthopedic patients into two classes (**normal** a
 
 ---
 ### Repository breakdown
-
-The repository consists of a `requirements.txt` text file and a `Stryker_AI_Hackathon_notebook.ipynb` jupyter notebook file.  
+The repository consists of two folders. 'SubmissionCode' contains the `requirements.txt` text file and a `Stryker_AI_Hackathon_notebook.ipynb` jupyter notebook file.  
 `requirements.txt` contains all the required libraries and dependencies for the project. 
 `Stryker_AI_Hackathon_notebook.ipynb` is the notebook containing our teams submission code.
 
+The 'SubmissionResources' folder contains all relevant documentation for the project, including powerpoints explaining the 'Stryker_AI_Hackathon_notebook.ipynb` jupyter notebook file as well as the clinical Implementation. 
 ## Instructions for Setup
 
 #### **Option 1: Using a Virtual Environment (Recommended)**
