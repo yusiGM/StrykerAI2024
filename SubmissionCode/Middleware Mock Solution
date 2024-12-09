@@ -1,0 +1,198 @@
+#Here is a section of code to demonstrate how a middleware solution might work. We were unfortunately unable to test this out as we could not access an EHR and patient records within the timescale. 
+import json
+import datetime
+from typing import Dict, List, Optional, Union
+from dataclasses import dataclass
+from enum import Enum
+import re
+
+class HL7Version(Enum):
+    V2_3 = "2.3"
+    V2_4 = "2.4"
+    V2_5 = "2.5"
+    V2_6 = "2.6"
+    V2_7 = "2.7"
+
+class FHIRVersion(Enum):
+    DSTU2 = "dstu2"
+    STU3 = "stu3"
+    R4 = "r4"
+
+@dataclass
+class DicomMetadata:
+    patient_name: str
+    patient_id: str
+    study_instance_uid: str
+    series_instance_uid: str
+    sop_instance_uid: str
+    modality: str
+    study_date: str
+    accession_number: str
+    referring_physician: str
+    body_part_examined: str
+
+@dataclass
+class FHIRResource:
+    resource_type: str
+    id: str
+    meta: Dict
+    content: Dict
+
+class HealthcareDataValidator:
+    def __init__(self):
+        # DICOM validation rules
+        self.dicom_rules = {
+            "patient_id": r"^[A-Za-z0-9-]{1,64}$",
+            "study_instance_uid": r"^[0-9.]+$",
+            "series_instance_uid": r"^[0-9.]+$",
+            "sop_instance_uid": r"^[0-9.]+$",
+            "accession_number": r"^[A-Za-z0-9-]{1,16}$"
+        }
+        
+        # Allowed DICOM values
+        self.allowed_modalities = {"CR", "DX", "CT", "MR"}
+        self.required_dicom_tags = {
+            "PatientName", "PatientID", "StudyInstanceUID",
+            "SeriesInstanceUID", "SOPInstanceUID", "Modality"
+        }
+
+    def validate_dicom_metadata(self, metadata: DicomMetadata) -> bool:
+        """Validate DICOM metadata against rules"""
+        try:
+            # Check required fields
+            if not all([getattr(metadata, field.lower()) for field in self.required_dicom_tags]):
+                return False
+
+            # Validate modality
+            if metadata.modality not in self.allowed_modalities:
+                return False
+
+            # Validate UIDs and IDs against patterns
+            for field, pattern in self.dicom_rules.items():
+                value = getattr(metadata, field)
+                if not re.match(pattern, value):
+                    return False
+
+            return True
+        except Exception:
+            return False
+
+class HealthcareDataTransformer:
+    def dicom_to_fhir(self, dicom_metadata: DicomMetadata) -> FHIRResource:
+        """Transform DICOM metadata to FHIR ImagingStudy resource"""
+        return FHIRResource(
+            resource_type="ImagingStudy",
+            id=dicom_metadata.study_instance_uid,
+            meta={
+                "versionId": "1",
+                "lastUpdated": datetime.datetime.now().isoformat()
+            },
+            content={
+                "identifier": [{
+                    "system": "urn:dicom:uid",
+                    "value": dicom_metadata.study_instance_uid
+                }],
+                "status": "available",
+                "subject": {
+                    "reference": f"Patient/{dicom_metadata.patient_id}"
+                },
+                "started": dicom_metadata.study_date,
+                "series": [{
+                    "uid": dicom_metadata.series_instance_uid,
+                    "number": 1,
+                    "modality": {
+                        "system": "http://dicom.nema.org/resources/ontology/DCM",
+                        "code": dicom_metadata.modality
+                    },
+                    "instance": [{
+                        "uid": dicom_metadata.sop_instance_uid,
+                        "number": 1
+                    }]
+                }]
+            }
+        )
+
+class HealthcareMiddleware:
+    def __init__(self):
+        self.validator = HealthcareDataValidator()
+        self.transformer = HealthcareDataTransformer()
+        self.supported_standards = {
+            "DICOM": ["1.2.840.10008.1.2.1"],  # Explicit VR Little Endian
+            "HL7": [v.value for v in HL7Version],
+            "FHIR": [v.value for v in FHIRVersion]
+        }
+
+    async def process_imaging_workflow(self, dicom_metadata: DicomMetadata) -> Optional[Dict]:
+        """Process imaging workflow with proper healthcare standard validations"""
+        try:
+            # 1. Validate DICOM metadata
+            if not self.validator.validate_dicom_metadata(dicom_metadata):
+                raise ValueError("Invalid DICOM metadata")
+
+            # 2. Transform to FHIR
+            fhir_resource = self.transformer.dicom_to_fhir(dicom_metadata)
+
+            # 3. Create HL7 order message (simplified example)
+            hl7_message = self._create_hl7_order(dicom_metadata)
+
+            # 4. Bundle everything for the response
+            return {
+                "status": "success",
+                "fhir_resource": fhir_resource.__dict__,
+                "hl7_message": hl7_message,
+                "audit_trail": {
+                    "timestamp": datetime.datetime.now().isoformat(),
+                    "standards_used": ["DICOM", "FHIR", "HL7"],
+                    "versions": {
+                        "fhir": FHIRVersion.R4.value,
+                        "hl7": HL7Version.V2_7.value
+                    }
+                }
+            }
+
+        except Exception as e:
+            return {
+                "status": "error",
+                "error": str(e),
+                "timestamp": datetime.datetime.now().isoformat()
+            }
+
+    def _create_hl7_order(self, dicom_metadata: DicomMetadata) -> str:
+        """Create HL7 order message"""
+        # Simplified HL7 message creation (in real implementation would use proper HL7 library)
+        msg_datetime = datetime.datetime.now().strftime("%Y%m%d%H%M%S")
+        
+        segments = [
+            f"MSH|^~\\&|MIDDLEWARE|FACILITY|EHR|FACILITY|{msg_datetime}||ORM^O01|MSG00001|P|2.7",
+            f"PID|||{dicom_metadata.patient_id}||{dicom_metadata.patient_name}",
+            f"ORC|NW|{dicom_metadata.accession_number}|||||||{msg_datetime}",
+            f"OBR|1|{dicom_metadata.accession_number}||{dicom_metadata.modality}^{dicom_metadata.body_part_examined}"
+        ]
+        
+        return "\r".join(segments)
+
+# Example usage
+if __name__ == "__main__":
+    # Sample DICOM metadata
+    sample_metadata = DicomMetadata(
+        patient_name="SMITH^JOHN",
+        patient_id="PAT123",
+        study_instance_uid="1.2.840.123456.1",
+        series_instance_uid="1.2.840.123456.1.1",
+        sop_instance_uid="1.2.840.123456.1.1.1",
+        modality="CR",
+        study_date="20240308",
+        accession_number="ACC123",
+        referring_physician="DR_JONES",
+        body_part_examined="SPINE"
+    )
+
+    # Initialize and use middleware
+    middleware = HealthcareMiddleware()
+    import asyncio
+    
+    async def main():
+        result = await middleware.process_imaging_workflow(sample_metadata)
+        print(json.dumps(result, indent=2))
+
+    asyncio.run(main())
