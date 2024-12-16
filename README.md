@@ -5,10 +5,10 @@
 This project aims to classify orthopedic patients into two classes (**normal** and **abnormal**) based on six biomechanical and image-derived predictors using a machine-learning algorithm. Additionally, the project involves describing the steps to successfully deploy this solution into an orthopaedic outpatient clinical setting. The bonus challenge extends upon this by catagorisng patients into three classes (**normal**, **herniated disc** and **spondylolisthesis**)
 
 ---
-### Results
-
-Position: 3rd Place.
-Invited to attend and present at the "AI in Orthopaedics 2024 - Fundamentals for AI & ML in Orthopaedics and MSK 2024" conference, hosted by Stryker and the British Orthopaedic Association.
+### Results   
+   
+Position: 3rd Place.   
+Invited to attend and present at the "AI in Orthopaedics 2024 - Fundamentals for AI & ML in Orthopaedics and MSK 2024" conference, hosted by Stryker and the British Orthopaedic Association.   
 ---
 
 ## Team Members
