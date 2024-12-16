@@ -7,8 +7,8 @@ This project aims to classify orthopedic patients into two classes (**normal** a
 ---
 ### Results   
    
-Position: 3rd Place   
-Invited to attend and present at the "AI in Orthopaedics 2024 - Fundamentals for AI & ML in Orthopaedics and MSK 2024" conference, hosted by Stryker and the British Orthopaedic Association   
+-Position: 3rd Place   
+-Invited to attend and present at the "AI in Orthopaedics 2024 - Fundamentals for AI & ML in Orthopaedics and MSK 2024" conference, hosted by Stryker and the British Orthopaedic Association   
 
 ---
 
